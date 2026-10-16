@@ -3,7 +3,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.products.model.Category;
 import com.example.products.model.Product;
+import com.example.products.repository.CategoryRepository;
 import com.example.products.repository.ProductRepository;
 
 
@@ -11,8 +13,10 @@ import com.example.products.repository.ProductRepository;
 public class ProductService {
 
     private final ProductRepository repo;
-    public ProductService(ProductRepository repo){
+    private CategoryRepository repoCategory;
+    public ProductService(ProductRepository repo, CategoryRepository repoCategory){
         this.repo=repo;
+        this.repoCategory=repoCategory;
     }
 
     public List<Product> findAll(){
@@ -20,11 +24,16 @@ public class ProductService {
     }
     
     public Optional<Product> findById(Long id){
+   ;
         return repo.findById(id);
 
     }   
 
-    public Product save(Product product ){
+    public Product save(Product product, Long id ){
+             Category category = repoCategory.findById(id).orElseThrow(
+            
+        );
+        product.setCategory(category);
         return repo.save(product);
     }
 
@@ -36,7 +45,8 @@ public class ProductService {
         productBd.setName(newProduct.getName());
         productBd.setPrice(newProduct.getPrice());
         productBd.setStock(newProduct.getStock());
-        return Optional.of(save(productBd));
+        productBd.setCategory(newProduct.getCategory());
+        return Optional.of(save(productBd, id));
         
     }
 
