@@ -51,8 +51,8 @@ public class Product {
     public Double getPrice() {
         return price;
     }
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setPrice(double newPrice) {
+        this.price = newPrice;
     }
     public int getStock() {
         return stock;
@@ -65,6 +65,10 @@ public class Product {
     }
     public void setCategory(Category category) {
         this.category = category;
+    }
+    public boolean isPresent() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isPresent'");
     }
 
 

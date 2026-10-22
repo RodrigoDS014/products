@@ -1,5 +1,6 @@
 package com.example.products.controller;
 
+import com.example.products.dto.DiscountRequest;
 import com.example.products.dto.ProductRequest;
 import com.example.products.dto.ProductResponse;
 import com.example.products.model.Product;
@@ -48,16 +49,27 @@ public class ProductController {
     }       
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> update(@PathVariable Long id, @Valid @RequestBody ProductRequest productUpdated) {
-        Optional<Product> product = service.update(
-            id,
-            toEntity(productUpdated),
-            productUpdated.categoryId()
+    public ResponseEntity<ProductResponse> update(
+            @PathVariable Long id, 
+            @Valid @RequestBody ProductRequest productUpdated) {
+
+        Long categoryId = productUpdated.categoryId(); 
+
+        Product updatedProduct = service.update(
+                id,
+                toEntity(productUpdated),
+                categoryId
         );
-        if (product.isPresent()) {
-            return ResponseEntity.ok(toResponse(product.get()));
-        }
-        return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(toResponse(updatedProduct));
+    }
+
+    @PatchMapping("/{id}/discount")
+    public ResponseEntity<ProductResponse> applyDiscount(
+            @PathVariable Long id,
+            @Valid @RequestBody DiscountRequest request) {
+        Product productWithDiscount = service.applyDiscount(id, request);
+        return ResponseEntity.ok(toResponse(productWithDiscount));
     }
 
     @DeleteMapping("/{id}")

@@ -7,3 +7,4 @@ public record CategoryRequest(
     String name
 ) {
 }
+
